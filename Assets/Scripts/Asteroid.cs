@@ -1,5 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,8 +11,7 @@ public class Asteroid : MonoBehaviour
     private static Vector2 vector = new Vector2();
     private int num;
     private int degree;
-    public Text scoreT;
-    private int score;
+    private static int score = 0;
 
     public static Vector2 DegreeToVector2(float degree)
     {
@@ -25,7 +24,6 @@ public class Asteroid : MonoBehaviour
 
     void Start()
     {
-        score = 0;
         rigidbody = GetComponent<Rigidbody2D>();
         switch (gameObject.name)
         {
@@ -50,6 +48,8 @@ public class Asteroid : MonoBehaviour
         else if (collision.tag.Equals("Bullet"))
         {
             Dj.getInstant().play(Dj.Sound.Boom);
+            score += 5;
+            Dj.getInstant().setScore(score);
             if (num == 2)
             {
                 
@@ -70,7 +70,7 @@ public class Asteroid : MonoBehaviour
                 a.spawn(gameObject.transform.position.x, gameObject.transform.position.y);
             }
 
-            score += 5;
+            
             
             Destroy(collision.gameObject);
             Destroy(this.gameObject);
