@@ -15,7 +15,7 @@ public class UI : MonoBehaviour
     {
         return ui;
     }
-    // Start is called before the first frame update
+    
     void Start()
     {
         ui = this;
@@ -26,7 +26,7 @@ public class UI : MonoBehaviour
         score.text = scr + "";
     }
 
-    // Update is called once per frame
+    
     void Update()
     {
         
