@@ -10,6 +10,7 @@ public class Dj : MonoBehaviour
     private static AudioClip dea;
     public AudioClip dead;
     public AudioClip shot;
+    public AudioClip menu;
 
     private static AudioSource audio;
 
@@ -37,7 +38,8 @@ public class Dj : MonoBehaviour
     {
         Dead,
         Shot,
-        Boom
+        Boom,
+        Menu
     }
 
     public void play(Sound sound)
@@ -53,9 +55,22 @@ public class Dj : MonoBehaviour
             case Sound.Boom:
                 audio.PlayOneShot(boom);
                 break;
+            case Sound.Menu:
+                //audio.loop = true;
+                //audio.PlayOneShot(menu);
+                break;
         }
     }
 
+    public void stop(Sound sound)
+    {
+        switch (sound)
+        {
+            case Sound.Menu:
+                audio.Stop();
+                break;
+        }
+    }
     // Update is called once per frame
     void Update()
     {

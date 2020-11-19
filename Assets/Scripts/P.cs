@@ -47,7 +47,7 @@ public class P : MonoBehaviour
         if (other.name == "plane")
         {
             ((Player)other.GetComponent(typeof(Player))).miniGun();
-            Destroy(this);
+            Destroy(this.gameObject);
         }
     }
 }

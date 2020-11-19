@@ -21,7 +21,7 @@ public class Bullet : MonoBehaviour
     {
         if (collision.tag.Equals("Wall"))
         {
-            Bullets.removeBullet(gameObject);
+            Destroy(this.gameObject);
         }
     }
 

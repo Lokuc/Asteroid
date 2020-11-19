@@ -15,7 +15,7 @@ public class Bullets : MonoBehaviour
     private Rigidbody2D planerigidbody2D;
     private static int count;
     // Start is called before the first frame update
-    void Start()
+    void Start()         //DELET CLASS
     {
         bullet = new List<GameObject>();
         count = -1;
@@ -25,11 +25,7 @@ public class Bullets : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Dj.getInstant().play(Dj.Sound.Shot);
-            Shot();
-        }
+        
     }
 
 

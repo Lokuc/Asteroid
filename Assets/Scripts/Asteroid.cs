@@ -48,7 +48,7 @@ public class Asteroid : MonoBehaviour
         {
             Dj.getInstant().play(Dj.Sound.Boom);
             score += 5;
-            if (random.Next(100) > 50)
+            if (random.Next(100) > 75)
             {
                 GameObject perk = Instantiate(p);
                 perk.transform.position = this.gameObject.transform.position;
