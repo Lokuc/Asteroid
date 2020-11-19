@@ -10,7 +10,6 @@ public class Dj : MonoBehaviour
     private static AudioClip dea;
     public AudioClip dead;
     public AudioClip shot;
-    public Text score;
 
     private static AudioSource audio;
 
@@ -20,11 +19,7 @@ public class Dj : MonoBehaviour
     {
         return instant;
     }
-
-    public void setScore(int scr)
-    {
-        score.text = scr + "";
-    }
+    
     // Start is called before the first frame update
     void Start()
     {

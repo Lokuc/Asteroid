@@ -1,7 +1,5 @@
 ﻿
-using System;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Asteroid : MonoBehaviour
 {
@@ -11,7 +9,8 @@ public class Asteroid : MonoBehaviour
     private static Vector2 vector = new Vector2();
     private int num;
     private int degree;
-    private static int score = 0;
+    public GameObject p;
+    public static int score;
 
     public static Vector2 DegreeToVector2(float degree)
     {
@@ -49,7 +48,12 @@ public class Asteroid : MonoBehaviour
         {
             Dj.getInstant().play(Dj.Sound.Boom);
             score += 5;
-            Dj.getInstant().setScore(score);
+            if (random.Next(100) > 50)
+            {
+                GameObject perk = Instantiate(p);
+                perk.transform.position = this.gameObject.transform.position;
+            }
+            
             if (num == 2)
             {
                 
@@ -71,7 +75,7 @@ public class Asteroid : MonoBehaviour
             }
 
             
-            
+            UI.getUI().setScore(score);
             Destroy(collision.gameObject);
             Destroy(this.gameObject);
         }

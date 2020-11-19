@@ -8,6 +8,7 @@ TagManager:
   - Wall
   - Asteroids
   - BigWall
+  - Perki
   layers:
   - Default
   - TransparentFX

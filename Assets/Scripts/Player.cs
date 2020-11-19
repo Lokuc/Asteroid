@@ -16,9 +16,15 @@ public class Player : MonoBehaviour
     public float forse;
     void Start()
     {
+        Asteroid.score = 0;
         rigidbody = GetComponent<Rigidbody2D>();
         tmp = new Vector2();
         vector = new Vector2();
+    }
+
+    public void miniGun()
+    {
+        Debug.Log("g");
     }
 
     // Update is called once per frame

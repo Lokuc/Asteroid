@@ -10,13 +10,11 @@ public class Asteroids : MonoBehaviour
     public static GameObject[] ast;
     private System.Random random;
     private int tmp;
-    private Rigidbody2D rigidbody;
-    private static List<GameObject> asteroid;
-    private int count = -1;
-    // Start is called before the first frame update
+    private GameObject tmpGame;
+
+
     void Start()
     {
-        asteroid = new List<GameObject>();
         random = new System.Random();
         ast = aste;
     }
@@ -43,9 +41,8 @@ public class Asteroids : MonoBehaviour
     private void spawnn()
     {
         tmp = random.Next(3);
-        count++;
-        asteroid.Add(Instantiate(ast[tmp]));
-        astes = (Asteroid)asteroid[count].GetComponent(typeof(Asteroid));
+        tmpGame = Instantiate(ast[tmp]);
+        astes = (Asteroid)tmpGame.GetComponent(typeof(Asteroid));
         astes.spawn();
 
     }
