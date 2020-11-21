@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿
+using UnityEngine;
 
-public class P : MonoBehaviour
+public class A : MonoBehaviour
 {
-
+    
     private SpriteRenderer _spriteRenderer;
     private float alfa = 1f;
     private bool toUp = false;
@@ -46,7 +47,7 @@ public class P : MonoBehaviour
     {
         if (other.name == "plane")
         {
-            ((Player)other.GetComponent(typeof(Player))).miniGun();
+            ((Player)other.GetComponent(typeof(Player))).doubleGun();
             Destroy(this.gameObject);
         }else if (other.tag == "Wall")
         {

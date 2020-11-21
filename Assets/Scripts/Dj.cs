@@ -1,8 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+﻿
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Dj : MonoBehaviour
 {
@@ -11,8 +8,11 @@ public class Dj : MonoBehaviour
     public AudioClip dead;
     public AudioClip shot;
     public AudioClip menu;
+    public AudioClip game;
 
-    private static AudioSource audio;
+    public AudioSource music;
+    public AudioSource sound;
+    
 
     private static Dj instant;
 
@@ -25,7 +25,6 @@ public class Dj : MonoBehaviour
     void Start()
     {
         DontDestroyOnLoad(this);
-        audio = GetComponent<AudioSource>();
         dea = dead;
         if (instant == null)
         {
@@ -39,25 +38,34 @@ public class Dj : MonoBehaviour
         Dead,
         Shot,
         Boom,
-        Menu
+        Menu,
+        Game
     }
 
     public void play(Sound sound)
     {
+        music.volume = Settings.musicf;
+        this.sound.volume = Settings.soundf;
         switch (sound)
         {
             case Sound.Dead:
-                audio.PlayOneShot(dea);
+                this.sound.PlayOneShot(dea);
                 break;
             case Sound.Shot:
-                audio.PlayOneShot(shot);
+                this.sound.PlayOneShot(shot);
                 break;
             case Sound.Boom:
-                audio.PlayOneShot(boom);
+                this.sound.PlayOneShot(boom);
                 break;
             case Sound.Menu:
-                //audio.loop = true;
-                //audio.PlayOneShot(menu);
+                music.loop = true;
+                music.clip = menu;
+                music.Play();
+                break;
+            case Sound.Game:
+                music.loop = true;
+                music.clip = game;
+                music.Play();
                 break;
         }
     }
@@ -67,7 +75,10 @@ public class Dj : MonoBehaviour
         switch (sound)
         {
             case Sound.Menu:
-                audio.Stop();
+                music.Stop();
+                break;
+            case Sound.Game:
+                music.Stop();
                 break;
         }
     }
