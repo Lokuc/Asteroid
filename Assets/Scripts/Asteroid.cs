@@ -1,11 +1,13 @@
 ﻿
 using System;
 using UnityEngine;
+using UnityEngine.Analytics;
 
 public class Asteroid : MonoBehaviour
 {
 
     private Rigidbody2D rigidbody;
+    public static PolygonCollider2D plane;
     private static System.Random random = new System.Random();
     private static Vector2 vector = new Vector2();
     [NonSerialized]
@@ -15,6 +17,7 @@ public class Asteroid : MonoBehaviour
     public GameObject a;
     public static int score;
     private Vector2 saveRotate;
+    private static float dist;
 
     public static Vector2 DegreeToVector2(float degree)
     {
@@ -42,32 +45,33 @@ public class Asteroid : MonoBehaviour
 
         }
     }
-    private void OnTriggerEnter2D(Collider2D collision)
+
+    public void DestroyAndSpawn(Collider2D collision)
     {
-        if (collision.tag.Equals("BigWall"))
-        {
-            Destroy(this.gameObject);
-        }
-        else if (collision.tag.Equals("Bullet"))
-        {
-            if (name != "boom" || collision.name == "bulletMiniG(Clone)"|| collision.name=="Bullet(Clone)")
+        if (name != "boom" || collision.name == "bulletMiniG(Clone)"|| collision.name=="Bullet(Clone)"||(collision.name=="plane"&&Player.noDead))
 
         {
-                Dj.getInstant().play(Dj.Sound.Boom);
+            Dj.getInstant().play(Dj.Sound.Boom);
+            if (collision.name != "ulta(Clone)")
+            {
                 switch (num)
                 {
                     case 2:
-                        score += 1;
+                        score += 10;
+                        ProgresBarUlta.addTime(0.08f);
                         break;
                     case 1:
-                        score += 3;
+                        score += 20;
+                        ProgresBarUlta.addTime(0.1f);
                         break;
                     case 0:
-                        score += 5;
+                        score += 30;
+                        ProgresBarUlta.addTime(0.13f);
                         break;
                 }
+            }
 
-                if (random.Next(100) > 95)
+            if (random.Next(100) > 95)
                 {
                     GameObject perk = Instantiate(p);
                     perk.transform.position = this.gameObject.transform.position;
@@ -127,12 +131,31 @@ public class Asteroid : MonoBehaviour
 
                 UI.getUI().setScore(score);
                 Destroy(this.gameObject);
-                if (collision.name != "ulta(Clone)")
+                switch (collision.name)
                 {
-                    Destroy(collision.gameObject);
+                    case "ulta(Clone)":
+                        break;
+                    case "plane":
+                        break;
+                    default:
+                        Destroy(collision.gameObject);
+                        break;
                 }
                 
+                
         }
+    }
+    
+    
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag.Equals("BigWall"))
+        {
+            Destroy(this.gameObject);
+        }
+        else if (collision.tag.Equals("Bullet"))
+        {
+            DestroyAndSpawn(collision);
         }
 
     }
@@ -185,6 +208,12 @@ public class Asteroid : MonoBehaviour
 
     void Update()
     {
+        dist = (plane.Distance(gameObject.GetComponent<BoxCollider2D>())).distance;
+        if (dist < 1f)
+        {
+            //Dj.getInstant().warning(dist);
+        }
+        
         degree += 3;
         rigidbody.rotation =degree;
         

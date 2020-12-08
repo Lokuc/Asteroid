@@ -24,6 +24,7 @@ public class Menu : MonoBehaviour
                 break;
             case "Settings":
                 Dj.getInstant().stop(Dj.Sound.Menu);
+                Settings.who = 0;
                 SceneManager.LoadScene("Settings");
                 break;
         }

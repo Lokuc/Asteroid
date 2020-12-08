@@ -23,8 +23,28 @@ public class Player : MonoBehaviour
     private bool updateMiniGun = false;
     private float updateGun = 0f;
     private float timeUlta = 0f;
+    public static bool noDead;
+    private float immortal = 0f;
+    private Color color;
+    private bool toUp;
+    private float alfa = 0f;
+    private SpriteRenderer _spriteRenderer;
+    public static bool pause;
+    public GameObject deadScreen;
+    private bool dead;
+    public GameObject buttonSpace;
+    public GameObject joystick;
+
+
     void Start()
     {
+        Asteroid.plane = gameObject.GetComponent<PolygonCollider2D>();
+        setPause(false);
+        dead = false;
+        _spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+        toUp = false;
+        color=new Color(1f,1f,1f,1f);
+        noDead = false;
         Asteroid.score = 0;
         rigidbody = GetComponent<Rigidbody2D>();
         tmp = new Vector2();
@@ -45,133 +65,259 @@ public class Player : MonoBehaviour
         update = true;
     }
 
+    private void setPause()
+    {
+        if (pause)
+        {
+            pause = false;
+            Time.timeScale = 1f;
+        }
+        else
+        {
+            pause = true;
+            Time.timeScale = 0f;
+        }
+    }
+
+    private void setPause(bool pause)
+    {
+        
+        Player.pause = pause;
+        Time.timeScale = pause?0f:1f;
+    }
+    
+    //void 
+    
     // Update is called once per frame
     void Update()
-    { 
+    {
         
-        if (_miniGun)
+        if (dead)
         {
-            if (Input.GetKey(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.R))
             {
-                pressShotMini = true;
+               restart();
             }
-            else
-            {
-                pressShotMini = false;
-            }
-            timeMiniGun += Time.deltaTime;
-        }
-        else
-        {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                Dj.getInstant().play(Dj.Sound.Shot);
-                Shot();
-            }
-        }
-        if (timeMiniGun > 5f)
-        {
-            _miniGun = false;
-            pressShotMini = false;
-            timeMiniGun = 0f;
-        }
-        tmp = rigidbody.velocity;
-        if (tmp.x < 0.05 && tmp.x > -0.05)
-        {
-            tmp.x = 0;
-        }
-        else
-        {
-            if (tmp.x > 0)
-            {
-                tmp.x -= 0.05f;
-            }
-            else
-            {
-                tmp.x += 0.05f;
-            }
-        }
-        if (tmp.y < 0.05 && tmp.y > -0.05)
-        {
-            tmp.y = 0;
-        }
-        else
-        {
-            if (tmp.y > 0)
-            {
-                tmp.y -= 0.05f;
-            }
-            else
-            {
-                tmp.y += 0.05f;
-            }
-        }
-        rigidbody.velocity = tmp;
-        if (Input.GetKey(KeyCode.W))
-        {
-            rigidbody.AddForce(transform.up*0.2f, ForceMode2D.Impulse);
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            rotate -= 4;
-        }
 
-        timeUlta += Time.deltaTime;
-        if (timeUlta > 15f)
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                SceneManager.LoadScene("Menu");
+            }
+        }
+        else
         {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                setPause();
+            }
+        }
+        if (!pause)
+        {
+            if (_miniGun)
+            {
+                if (Input.GetKey(KeyCode.Space))
+                {
+                    ((CustomButton)(buttonSpace.GetComponent(typeof(CustomButton)))).setActive(true);
+                    pressShotMini = true;
+                }
+                else
+                {
+                    ((CustomButton)(buttonSpace.GetComponent(typeof(CustomButton)))).setActive(false);
+                    pressShotMini = false;
+                }
+
+                timeMiniGun += Time.deltaTime;
+            }
+            else
+            {
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    ((CustomButton)(buttonSpace.GetComponent(typeof(CustomButton)))).setActive(true);
+                    Dj.getInstant().play(Dj.Sound.Shot);
+                    Shot();
+                }
+                else
+                {
+                    ((CustomButton)(buttonSpace.GetComponent(typeof(CustomButton)))).setActive(false);
+                }
+            }
+
+            if (timeMiniGun > 5f)
+            {
+                _miniGun = false;
+                pressShotMini = false;
+                timeMiniGun = 0f;
+            }
+
+            tmp = rigidbody.velocity;
+            if (tmp.x < 0.05 && tmp.x > -0.05)
+            {
+                tmp.x = 0;
+            }
+            else
+            {
+                if (tmp.x > 0)
+                {
+                    tmp.x -= 0.05f;
+                }
+                else
+                {
+                    tmp.x += 0.05f;
+                }
+            }
+
+            if (tmp.y < 0.05 && tmp.y > -0.05)
+            {
+                tmp.y = 0;
+            }
+            else
+            {
+                if (tmp.y > 0)
+                {
+                    tmp.y -= 0.05f;
+                }
+                else
+                {
+                    tmp.y += 0.05f;
+                }
+            }
+
+            rigidbody.velocity = tmp;
+            if (Input.GetKey(KeyCode.W))
+            {
+                rigidbody.AddForce(transform.up * 0.2f, ForceMode2D.Impulse);
+            }
+
+            if (Input.GetKey(KeyCode.D))
+            {
+                rotate -= 4;
+            }
+
             if (Input.GetKeyDown(KeyCode.E))
             {
-                superShot();
-                timeUlta = 0f;
+                ((ProgresBarUlta)ulta.GetComponent(typeof(ProgresBarUlta))).UltaShot(gameObject.transform.position);
             }
+
+                if (Input.GetKey(KeyCode.A))
+            {
+                rotate += 4;
+            }
+
+            rigidbody.rotation = rotate;
         }
 
-        if (Input.GetKey(KeyCode.A))
+        joystickset();
+
+    }
+
+    public void restart()
+    {
+        SceneManager.LoadScene("MainGame");
+    }
+
+    public void settings()
+    {
+        Settings.who = 1;
+        SceneManager.LoadScene("Settings");
+    }
+
+    public void menu()
+    {
+        SceneManager.LoadScene("Menu");
+    }
+
+    private void joystickset()
+    {
+        if (Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.D))
         {
-            rotate+=4;
+            ((Joystick)(joystick.GetComponent(typeof(Joystick)))).setType(5);
         }
-        rigidbody.rotation = rotate;
-        
+        else if (Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.A))
+        {
+            ((Joystick)(joystick.GetComponent(typeof(Joystick)))).setType(4);
+        }else if (Input.GetKey(KeyCode.W))
+        {
+            ((Joystick)(joystick.GetComponent(typeof(Joystick)))).setType(1);
+        }else if (Input.GetKey(KeyCode.D))
+        {
+            ((Joystick)(joystick.GetComponent(typeof(Joystick)))).setType(2);
+        }else if (Input.GetKey(KeyCode.A))
+        {
+            ((Joystick)(joystick.GetComponent(typeof(Joystick)))).setType(3);
+        }else 
+        {
+            ((Joystick)(joystick.GetComponent(typeof(Joystick)))).setType(0);
+        }
         
     }
 
     private void FixedUpdate()
     {
-        if (pressShotMini)
+        if (!pause)
         {
-            speedShotMiniGun += Time.fixedDeltaTime;
-            if (update)
+            if (noDead)
             {
-                if (speedShotMiniGun > 0.15f)
+                immortal -= Time.fixedDeltaTime;
+                if (immortal > 0f)
                 {
-                    Dj.getInstant().play(Dj.Sound.Shot);
-                    ShotMiniGun();
-                    speedShotMiniGun = 0f;
+                    if (toUp)
+                    {
+                        alfa += 25f * Time.deltaTime;
+                        if (alfa > 1f)
+                        {
+                            alfa = 1f;
+                            toUp = false;
+                        }
+                    }
+                    else
+                    {
+                        alfa -= 25f * Time.deltaTime;
+                        if (alfa < 0f)
+                        {
+                            alfa = 0f;
+                            toUp = true;
+                        }
+                    }
+
+                    color.a = alfa;
+                    _spriteRenderer.color = color;
                 }
-            }
-            else
-            {
-                if (speedShotMiniGun > 0.3f)
+                else
                 {
-                    Dj.getInstant().play(Dj.Sound.Shot);
-                    ShotMiniGun();
-                    speedShotMiniGun = 0f;
+                    noDead = false;
+                    color.a = 1f;
+                    _spriteRenderer.color = color;
                 }
             }
 
+            if (pressShotMini)
+            {
+                speedShotMiniGun += Time.fixedDeltaTime;
+                if (update)
+                {
+                    if (speedShotMiniGun > 0.15f)
+                    {
+                        Dj.getInstant().play(Dj.Sound.Shot);
+                        ShotMiniGun();
+                        speedShotMiniGun = 0f;
+                    }
+                }
+                else
+                {
+                    if (speedShotMiniGun > 0.3f)
+                    {
+                        Dj.getInstant().play(Dj.Sound.Shot);
+                        ShotMiniGun();
+                        speedShotMiniGun = 0f;
+                    }
+                }
 
+
+            }
         }
     }
 
-
-    public void superShot()
-    {
-        GameObject ult = Instantiate(ulta);
-        vector.x = 0.06f;
-        vector.y = 0.06f;
-        ult.transform.localScale = vector;
-        ult.transform.position = gameObject.transform.position;
-    }
+    
 
 
 
@@ -253,7 +399,7 @@ public class Player : MonoBehaviour
         }
     }
     private void OnTriggerEnter2D(Collider2D collision)
-    {   //5 8.7
+    {  
         if (collision.tag.Equals("Wall"))
         {
             tmp = gameObject.transform.position;
@@ -303,20 +449,35 @@ public class Player : MonoBehaviour
             gameObject.transform.position = tmp;
         }else if (collision.tag.Equals("Asteroids"))
         {
-            life--;
-            LifeObjects[life].SetActive(false);
-            update = false;
-            updateMiniGun = false;
-            if (life <= 0)
+            if (!noDead)
             {
-                Dj.getInstant().stop(Dj.Sound.Game);
-                Dj.getInstant().play(Dj.Sound.Dead);
-                
-                SceneManager.LoadScene("MainGame");
+                life--;
+                LifeObjects[life].SetActive(false);
+                update = false;
+                updateMiniGun = false;
+                if (life <= 0)
+                {
+                    setPause(true);
+                    dead = true;
+                    Dj.getInstant().stop(Dj.Sound.Game);
+                    Dj.getInstant().play(Dj.Sound.Dead);
+                    deadScreen.SetActive(true);
+                }
+                else
+                {
+                    Dj.getInstant().play(Dj.Sound.Boom);
+                    vector.x = 0;
+                    vector.y = 0;
+                    vector.x = 0;
+                    rigidbody.velocity = vector;
+                    gameObject.transform.position = vector;
+                    noDead = true;
+                    immortal = 3f;
+                }
             }
             else
             {
-                Dj.getInstant().play(Dj.Sound.Boom);
+                //((Asteroid)collision.GetComponent(typeof(Asteroid))).DestroyAndSpawn(gameObject.GetComponent<Collider2D>());
             }
         }
     }

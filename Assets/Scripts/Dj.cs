@@ -1,4 +1,5 @@
 ﻿
+using System;
 using UnityEngine;
 
 public class Dj : MonoBehaviour
@@ -9,9 +10,11 @@ public class Dj : MonoBehaviour
     public AudioClip shot;
     public AudioClip menu;
     public AudioClip game;
-
+    private float volume;
     public AudioSource music;
     public AudioSource sound;
+    public AudioSource loopin;
+    public AudioClip warnin;
     
 
     private static Dj instant;
@@ -24,12 +27,18 @@ public class Dj : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        loopin.loop = true;
+        volume = 0f;
         DontDestroyOnLoad(this);
         dea = dead;
         if (instant == null)
         {
             instant = this;
         }
+
+        loopin.clip = warnin;
+        loopin.Play();
+        loopin.volume = 0f;
 
     }
 
@@ -86,5 +95,30 @@ public class Dj : MonoBehaviour
     void Update()
     {
         
+    }
+
+    private void FixedUpdate()
+    {
+        if (loopin.volume>volume)
+        {
+            loopin.volume += 0.1f;
+        }else if(loopin.volume<volume)
+        {
+            loopin.volume -= 0.1f;
+        }
+        loopin.volume = volume/2;
+        volume = 0f;
+    }
+
+    public void warning(float dist)
+    {
+        if (dist < 0.3f)
+        {
+            return;
+        }
+        if (volume < dist)
+        {
+            volume = dist;
+        }
     }
 }
