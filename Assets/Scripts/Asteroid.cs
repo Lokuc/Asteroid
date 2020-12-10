@@ -1,5 +1,6 @@
 ﻿
 using System;
+using UI;
 using UnityEngine;
 using UnityEngine.Analytics;
 
@@ -129,7 +130,7 @@ public class Asteroid : MonoBehaviour
 
 
 
-                UI.getUI().setScore(score);
+                UI.UI.getUI().setScore(score);
                 Destroy(this.gameObject);
                 switch (collision.name)
                 {
@@ -211,7 +212,7 @@ public class Asteroid : MonoBehaviour
         dist = (plane.Distance(gameObject.GetComponent<BoxCollider2D>())).distance;
         if (dist < 1f)
         {
-            //Dj.getInstant().warning(dist);
+            Dj.getInstant().warning(dist);
         }
         
         degree += 3;

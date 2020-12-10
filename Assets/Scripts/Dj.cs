@@ -1,5 +1,6 @@
 ﻿
 using System;
+using onClick;
 using UnityEngine;
 
 public class Dj : MonoBehaviour
@@ -30,10 +31,15 @@ public class Dj : MonoBehaviour
         loopin.loop = true;
         volume = 0f;
         DontDestroyOnLoad(this);
+        
         dea = dead;
         if (instant == null)
         {
             instant = this;
+        }
+        else
+        {
+            Destroy(this.gameObject);
         }
 
         loopin.clip = warnin;
@@ -99,20 +105,33 @@ public class Dj : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (loopin.volume>volume)
+        if (loopin.volume != volume)
         {
-            loopin.volume += 0.1f;
-        }else if(loopin.volume<volume)
-        {
-            loopin.volume -= 0.1f;
+            if (loopin.volume < volume)
+            {
+                loopin.volume += 0.1f;
+                if (loopin.volume > volume)
+                {
+                    loopin.volume = volume;
+                }
+            }
+            else if (loopin.volume > volume)
+            {
+                loopin.volume -= 0.01f;
+                if (loopin.volume < volume)
+                {
+                    loopin.volume = volume;
+                }
+            }
         }
-        loopin.volume = volume/2;
+
+        //loopin.volume = volume/2;
         volume = 0f;
     }
 
     public void warning(float dist)
     {
-        if (dist < 0.3f)
+        if (dist < 0.25f)
         {
             return;
         }

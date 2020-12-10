@@ -1,43 +1,42 @@
-﻿using UnityEngine;
+﻿using onClick;
+using UI;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
 
-    private Rigidbody2D rigidbody;
+    private new Rigidbody2D rigidbody;
     private Vector2 vector;
     private Vector2 tmp;
-    private float rotate = 0;
-    public float forse;
+    private float rotate;
     private GameObject bull;
-    private bool _miniGun;
-    private float timeMiniGun;
     public GameObject bullet;
     public GameObject bulletMiniG;
     public GameObject ulta;
     private int life = 3;
-    private bool update;
     public GameObject[] LifeObjects;
-    private float speedShotMiniGun = 0f;
-    private bool pressShotMini = false;
-    private bool updateMiniGun = false;
-    private float updateGun = 0f;
-    private float timeUlta = 0f;
+    private float speedShotMiniGun;
+    private bool pressShotMini;
+    private bool updateMiniGun;
     public static bool noDead;
-    private float immortal = 0f;
+    private float immortal;
     private Color color;
     private bool toUp;
-    private float alfa = 0f;
+    private float alfa;
     private SpriteRenderer _spriteRenderer;
     public static bool pause;
     public GameObject deadScreen;
     private bool dead;
     public GameObject buttonSpace;
     public GameObject joystick;
+    public MainUpdaiter updaiter;
 
 
     void Start()
     {
+        P.updaiter = updaiter;
+        A.MainUpdaiter = updaiter;
         Asteroid.plane = gameObject.GetComponent<PolygonCollider2D>();
         setPause(false);
         dead = false;
@@ -50,20 +49,10 @@ public class Player : MonoBehaviour
         tmp = new Vector2();
         vector = new Vector2();
         Dj.getInstant().play(Dj.Sound.Game);
-        update = false;
-        
+
     }
 
-    public void miniGun()
-    {
-        _miniGun = true;
-        timeMiniGun = 0f;
-    }
-
-    public void doubleGun()
-    {
-        update = true;
-    }
+    
 
     private void setPause()
     {
@@ -79,16 +68,14 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void setPause(bool pause)
+    private void setPause(bool paus)
     {
         
-        Player.pause = pause;
-        Time.timeScale = pause?0f:1f;
+        Player.pause = paus;
+        Time.timeScale = paus?0f:1f;
     }
     
-    //void 
     
-    // Update is called once per frame
     void Update()
     {
         
@@ -113,7 +100,7 @@ public class Player : MonoBehaviour
         }
         if (!pause)
         {
-            if (_miniGun)
+            if (updaiter.getActive(MainUpdaiter.Updates.MiniGun))
             {
                 if (Input.GetKey(KeyCode.Space))
                 {
@@ -125,8 +112,6 @@ public class Player : MonoBehaviour
                     ((CustomButton)(buttonSpace.GetComponent(typeof(CustomButton)))).setActive(false);
                     pressShotMini = false;
                 }
-
-                timeMiniGun += Time.deltaTime;
             }
             else
             {
@@ -142,12 +127,7 @@ public class Player : MonoBehaviour
                 }
             }
 
-            if (timeMiniGun > 5f)
-            {
-                _miniGun = false;
-                pressShotMini = false;
-                timeMiniGun = 0f;
-            }
+            
 
             tmp = rigidbody.velocity;
             if (tmp.x < 0.05 && tmp.x > -0.05)
@@ -289,13 +269,13 @@ public class Player : MonoBehaviour
                     _spriteRenderer.color = color;
                 }
             }
-
+            
             if (pressShotMini)
             {
                 speedShotMiniGun += Time.fixedDeltaTime;
-                if (update)
+                if (updaiter.getActive(MainUpdaiter.Updates.DoubleGun))
                 {
-                    if (speedShotMiniGun > 0.15f)
+                    if (speedShotMiniGun > 0.05f)
                     {
                         Dj.getInstant().play(Dj.Sound.Shot);
                         ShotMiniGun();
@@ -314,6 +294,7 @@ public class Player : MonoBehaviour
 
 
             }
+            
         }
     }
 
@@ -327,7 +308,7 @@ public class Player : MonoBehaviour
         {
             bull = Instantiate(bullet);
             vector = transform.position;
-            if (update)
+            if (updaiter.getActive(MainUpdaiter.Updates.DoubleGun))
             {
                 updateMiniGun = true;
                 vector.x += rigidbody.transform.right.x / 10f;
@@ -347,7 +328,7 @@ public class Player : MonoBehaviour
         else
         {
 
-            if (update)
+            if (updaiter.getActive(MainUpdaiter.Updates.DoubleGun))
             {
                 bull = Instantiate(bullet);
                 vector = transform.position;
@@ -368,7 +349,7 @@ public class Player : MonoBehaviour
         {
             bull = Instantiate(bulletMiniG);
             vector = transform.position;
-            if (update)
+            if (updaiter.getActive(MainUpdaiter.Updates.DoubleGun))
             {
                 updateMiniGun = true;
                 vector.x += rigidbody.transform.right.x / 10f;
@@ -386,7 +367,7 @@ public class Player : MonoBehaviour
         }
         else
         {
-            if (update)
+            if (updaiter.getActive(MainUpdaiter.Updates.DoubleGun))
             {
                 bull = Instantiate(bulletMiniG);
                 vector = transform.position;
@@ -453,7 +434,7 @@ public class Player : MonoBehaviour
             {
                 life--;
                 LifeObjects[life].SetActive(false);
-                update = false;
+                updaiter.deActivate(MainUpdaiter.Updates.DoubleGun);
                 updateMiniGun = false;
                 if (life <= 0)
                 {

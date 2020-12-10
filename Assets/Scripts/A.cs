@@ -8,6 +8,7 @@ public class A : MonoBehaviour
     private float alfa = 1f;
     private bool toUp = false;
     private Color _color;
+    public static MainUpdaiter MainUpdaiter;
     
     
     void Start()
@@ -47,7 +48,7 @@ public class A : MonoBehaviour
     {
         if (other.name == "plane")
         {
-            ((Player)other.GetComponent(typeof(Player))).doubleGun();
+            MainUpdaiter.activate(MainUpdaiter.Updates.DoubleGun);
             Destroy(this.gameObject);
         }else if (other.tag == "Wall")
         {
