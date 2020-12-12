@@ -28,7 +28,7 @@ public class MainUpdaiter : MonoBehaviour
             case Updates.DoubleGun:
                 return _dounleGun.active;
             case Updates.MiniGun:
-                return _minigun;
+                return _minigun.active;
         }
 
         return false;
@@ -51,6 +51,12 @@ public class MainUpdaiter : MonoBehaviour
     void Update()
     {
         
+    }
+
+    private void LateUpdate()
+    {
+        _minigun.Updates();
+        _dounleGun.Updates();
     }
 
     public void deActivate(Updates updates)

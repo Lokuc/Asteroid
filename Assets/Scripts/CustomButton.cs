@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
 public class CustomButton : MonoBehaviour
@@ -7,18 +6,18 @@ public class CustomButton : MonoBehaviour
 
     public GameObject on;
     public GameObject off;
-
+    [SerializeField]
+    private KeyCode key;
     private bool isActive;
-    public bool test;
-    
-    
+
+
     // Start is called before the first frame update
     void Start()
     {
         setActive(false);
     }
 
-    public void setActive(bool Active)
+    private void setActive(bool Active)
     {
         if (Active == isActive)
         {
@@ -41,6 +40,6 @@ public class CustomButton : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        setActive(test);
+        setActive(Input.GetKey(key));
     }
 }

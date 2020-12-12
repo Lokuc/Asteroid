@@ -73,75 +73,75 @@ public class Asteroid : MonoBehaviour
             }
 
             if (random.Next(100) > 95)
-                {
+            {
                     GameObject perk = Instantiate(p);
                     perk.transform.position = this.gameObject.transform.position;
                     perk.GetComponent<Rigidbody2D>().AddForce(saveRotate * 50, ForceMode2D.Force);
-                }
-                else if (random.Next(100) > 87)
+            }
+            else if (random.Next(100) > 87)
+            {
+                GameObject perk = Instantiate(a);
+                perk.transform.position = this.gameObject.transform.position;
+                perk.GetComponent<Rigidbody2D>().AddForce(saveRotate * 50, ForceMode2D.Force);
+            }
+
+            if (num == 2)
+            {
+
+                GameObject go = Instantiate(Asteroids.ast[1]);
+                Asteroid a = (Asteroid) go.GetComponent(typeof(Asteroid));
+                a.spawn(gameObject.transform.position.x, gameObject.transform.position.y);
+                a.num = 1;
+                if (collision.name == "ulta(Clone)")
                 {
-                    GameObject perk = Instantiate(a);
-                    perk.transform.position = this.gameObject.transform.position;
-                    perk.GetComponent<Rigidbody2D>().AddForce(saveRotate * 50, ForceMode2D.Force);
+                    a.name = "boom";
                 }
 
-                if (num == 2)
+                go = Instantiate(Asteroids.ast[1]);
+                a = (Asteroid) go.GetComponent(typeof(Asteroid));
+                a.spawn(gameObject.transform.position.x, gameObject.transform.position.y);
+                a.num = 1;
+                if (collision.name == "ulta(Clone)")
                 {
-
-                    GameObject go = Instantiate(Asteroids.ast[1]);
-                    Asteroid a = (Asteroid) go.GetComponent(typeof(Asteroid));
-                    a.spawn(gameObject.transform.position.x, gameObject.transform.position.y);
-                    a.num = 1;
-                    if (collision.name == "ulta(Clone)")
-                    {
-                        a.name = "boom";
-                    }
-
-                    go = Instantiate(Asteroids.ast[1]);
-                    a = (Asteroid) go.GetComponent(typeof(Asteroid));
-                    a.spawn(gameObject.transform.position.x, gameObject.transform.position.y);
-                    a.num = 1;
-                    if (collision.name == "ulta(Clone)")
-                    {
-                        a.name = "boom";
-                    }
-
+                    a.name = "boom";
                 }
-                else if (num == 1)
+
+            }
+            else if (num == 1)
+            {
+                GameObject go = Instantiate(Asteroids.ast[0]);
+                Asteroid a = (Asteroid) go.GetComponent(typeof(Asteroid));
+                a.spawn(gameObject.transform.position.x, gameObject.transform.position.y);
+                a.num = 0;
+                if (collision.name == "ulta(Clone)")
                 {
-                    GameObject go = Instantiate(Asteroids.ast[0]);
-                    Asteroid a = (Asteroid) go.GetComponent(typeof(Asteroid));
-                    a.spawn(gameObject.transform.position.x, gameObject.transform.position.y);
-                    a.num = 0;
-                    if (collision.name == "ulta(Clone)")
-                    {
-                        a.name = "boom";
-                    }
-
-                    go = Instantiate(Asteroids.ast[0]);
-                    a = (Asteroid) go.GetComponent(typeof(Asteroid));
-                    a.spawn(gameObject.transform.position.x, gameObject.transform.position.y);
-                    a.num = 0;
-                    if (collision.name == "ulta(Clone)")
-                    {
-                        a.name = "boom";
-                    }
+                    a.name = "boom";
                 }
 
-
-
-                UI.UI.getUI().setScore(score);
-                Destroy(this.gameObject);
-                switch (collision.name)
+                go = Instantiate(Asteroids.ast[0]);
+                a = (Asteroid) go.GetComponent(typeof(Asteroid));
+                a.spawn(gameObject.transform.position.x, gameObject.transform.position.y);
+                a.num = 0;
+                if (collision.name == "ulta(Clone)")
                 {
-                    case "ulta(Clone)":
-                        break;
-                    case "plane":
-                        break;
-                    default:
-                        Destroy(collision.gameObject);
-                        break;
+                    a.name = "boom";
                 }
+            }
+
+
+
+            UI.UI.getUI().setScore(score);
+            Destroy(this.gameObject);
+            switch (collision.name)
+            {
+                case "ulta(Clone)":
+                    break;
+                case "plane":
+                    break;
+                default:
+                    Destroy(collision.gameObject);
+                    break;
+            }
                 
                 
         }

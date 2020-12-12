@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿
+using UnityEngine;
 
 namespace Updates
 {
@@ -21,13 +22,19 @@ namespace Updates
         {
             get
             {
-                return 2f;
+                return 3f;
             }
          
         }
 
         public void activate()
         {
+            if (active)
+            {
+                Asteroid.score += 50;
+                UI.UI.getUI().setScore(Asteroid.score);
+                return;
+            }
             active = true;
             timer = 0f;
         }
@@ -44,15 +51,17 @@ namespace Updates
         {
             if (active)
             {
-                timer++;
-            }
-
-            if (timer > time)
-            {
-                active = false;
+                timer += Time.deltaTime;
+                if (timer > time)
+                {
+                    active = false;
+                }
             }
         }
 
-    
+        public void Updates()
+        {
+            Update();
+        }
     }
 }

@@ -47,7 +47,15 @@ public class P : MonoBehaviour
     {
         if (other.name == "plane")
         {
-            updaiter.activate(MainUpdaiter.Updates.MiniGun);
+            if (updaiter._minigun.active)
+            {
+                Asteroid.score += 50;
+            }
+            else
+            {
+                updaiter.activate(MainUpdaiter.Updates.MiniGun);
+            }
+
             Destroy(this.gameObject);
         }else if (other.CompareTag("Wall"))
         {

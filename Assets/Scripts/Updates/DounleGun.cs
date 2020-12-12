@@ -30,6 +30,13 @@ namespace Updates
         }
         public void activate()
         {
+            if (active)
+            {
+                Asteroid.score += 50;
+                UI.UI.getUI().setScore(Asteroid.score);
+                return;
+            }
+            
             active = true;
             timer = 0f;
         }
@@ -39,6 +46,11 @@ namespace Updates
         {
             active = false;
             timer = 0f;
+        }
+        
+        public void Updates()
+        {
+            Update();
         }
 
         // Update is called once per frame

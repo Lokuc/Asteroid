@@ -13,6 +13,7 @@ namespace onClick
 
         void Start()
         {
+            inSettings = true;
             sound.value = soundf;
             music.value = musicf;
 
@@ -21,6 +22,7 @@ namespace onClick
         public static bool ramka = true;
         public static float soundf = 0.0f;
         public static float musicf = 0.0f;
+        public static bool inSettings;
         public static int who;
         public void onClick()
         {
@@ -32,7 +34,13 @@ namespace onClick
                     SceneManager.LoadScene("Menu");
                     break;
                 case 1:
-                    SceneManager.LoadScene("MainGame");
+                    //SceneManager.LoadScene(Player.scene);
+                    //SceneManager.LoadScene(Player.scene.buildIndex, LoadSceneMode.Single);
+                    //SceneManager.LoadScene(Player.scene,LoadSceneMode.Single);
+                    inSettings = false;
+                    SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName("Settings"));
+                    //SceneManager.SetActiveScene(Player.scene);
+                    
                     break;
                 default:
                     SceneManager.LoadScene("Menu");

@@ -48,7 +48,10 @@ public class A : MonoBehaviour
     {
         if (other.name == "plane")
         {
+            
             MainUpdaiter.activate(MainUpdaiter.Updates.DoubleGun);
+            
+
             Destroy(this.gameObject);
         }else if (other.tag == "Wall")
         {

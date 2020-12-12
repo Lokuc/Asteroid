@@ -22,6 +22,7 @@ namespace onClick
             {
                 case "Play":
                     Dj.getInstant().stop(Dj.Sound.Menu);
+                    //SceneManager.LoadScene("MainGame");
                     SceneManager.LoadScene("MainGame");
                     break;
                 case "Settings":

@@ -1,7 +1,10 @@
-﻿using onClick;
+﻿
+using System;
+using onClick;
 using UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+
 
 public class Player : MonoBehaviour
 {
@@ -31,10 +34,17 @@ public class Player : MonoBehaviour
     public GameObject buttonSpace;
     public GameObject joystick;
     public MainUpdaiter updaiter;
+    public static Scene scene;
+    public GameObject dark;
+    public GameObject eventSys;
+    private AudioListener audioListener;
+    public GameObject haveAL;
+
 
 
     void Start()
     {
+        audioListener = haveAL.GetComponent<AudioListener>();
         P.updaiter = updaiter;
         A.MainUpdaiter = updaiter;
         Asteroid.plane = gameObject.GetComponent<PolygonCollider2D>();
@@ -68,6 +78,8 @@ public class Player : MonoBehaviour
         }
     }
 
+    
+    
     private void setPause(bool paus)
     {
         
@@ -104,26 +116,25 @@ public class Player : MonoBehaviour
             {
                 if (Input.GetKey(KeyCode.Space))
                 {
-                    ((CustomButton)(buttonSpace.GetComponent(typeof(CustomButton)))).setActive(true);
+                    //((CustomButton)(buttonSpace.GetComponent(typeof(CustomButton)))).setActive(true);
                     pressShotMini = true;
                 }
                 else
                 {
-                    ((CustomButton)(buttonSpace.GetComponent(typeof(CustomButton)))).setActive(false);
+                    //((CustomButton)(buttonSpace.GetComponent(typeof(CustomButton)))).setActive(false);
                     pressShotMini = false;
                 }
-            }
-            else
-            {
+            }else {
+                pressShotMini = false;
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
-                    ((CustomButton)(buttonSpace.GetComponent(typeof(CustomButton)))).setActive(true);
+                    //((CustomButton)(buttonSpace.GetComponent(typeof(CustomButton)))).setActive(true);
                     Dj.getInstant().play(Dj.Sound.Shot);
                     Shot();
                 }
                 else
                 {
-                    ((CustomButton)(buttonSpace.GetComponent(typeof(CustomButton)))).setActive(false);
+                    //((CustomButton)(buttonSpace.GetComponent(typeof(CustomButton)))).setActive(false);
                 }
             }
 
@@ -178,17 +189,31 @@ public class Player : MonoBehaviour
                 ((ProgresBarUlta)ulta.GetComponent(typeof(ProgresBarUlta))).UltaShot(gameObject.transform.position);
             }
 
-                if (Input.GetKey(KeyCode.A))
+            if (Input.GetKey(KeyCode.A))
             {
                 rotate += 4;
             }
 
             rigidbody.rotation = rotate;
+            if (Input.GetKeyDown(KeyCode.M))
+            {
+                updaiter.activate(MainUpdaiter.Updates.MiniGun);   
+            }
+
+            if (Input.GetKeyDown(KeyCode.K))
+            {
+                updaiter.activate(MainUpdaiter.Updates.DoubleGun);
+            }
+            joystickset();
         }
 
-        joystickset();
+        
+
+        
 
     }
+
+   
 
     public void restart()
     {
@@ -197,8 +222,11 @@ public class Player : MonoBehaviour
 
     public void settings()
     {
+        dark.SetActive(true);
+        eventSys.SetActive(false);
+        scene = SceneManager.GetActiveScene();
         Settings.who = 1;
-        SceneManager.LoadScene("Settings");
+        SceneManager.LoadScene("Settings",LoadSceneMode.Additive);
     }
 
     public void menu()
@@ -284,7 +312,7 @@ public class Player : MonoBehaviour
                 }
                 else
                 {
-                    if (speedShotMiniGun > 0.3f)
+                    if (speedShotMiniGun > 0.1f)
                     {
                         Dj.getInstant().play(Dj.Sound.Shot);
                         ShotMiniGun();
@@ -296,11 +324,22 @@ public class Player : MonoBehaviour
             }
             
         }
+        
+    }
+
+
+    private void LateUpdate()
+    {
+        if (pause)
+        {
+            audioListener.enabled = !Settings.inSettings;
+            eventSys.SetActive(!Settings.inSettings);
+            dark.SetActive(Settings.inSettings);
+            
+        }
     }
 
     
-
-
 
     private void Shot()
     {
@@ -363,7 +402,7 @@ public class Player : MonoBehaviour
             }
 
             bull.transform.position = vector;
-            bull.GetComponent<Rigidbody2D>().AddForce(rigidbody.transform.up * 700, ForceMode2D.Force);
+            bull.GetComponent<Rigidbody2D>().AddForce(rigidbody.transform.up * 800, ForceMode2D.Force);
         }
         else
         {
@@ -374,7 +413,7 @@ public class Player : MonoBehaviour
                 vector.x -= rigidbody.transform.right.x / 10f;
                 vector.y -= rigidbody.transform.right.y / 10f;
                 bull.transform.position = vector;
-                bull.GetComponent<Rigidbody2D>().AddForce(rigidbody.transform.up * 700, ForceMode2D.Force);
+                bull.GetComponent<Rigidbody2D>().AddForce(rigidbody.transform.up * 800, ForceMode2D.Force);
                 updateMiniGun = false;
             }
         }
