@@ -10,28 +10,32 @@ namespace onClick
     
         public Slider sound;
         public Slider music;
-
+        public Toggle ramk;
+        
         void Start()
         {
             inSettings = true;
+            ramk.isOn = ramka;
             sound.value = soundf;
             music.value = musicf;
 
         }
 
         public static bool ramka = true;
-        public static float soundf = 0.0f;
-        public static float musicf = 0.0f;
+        public static float soundf;
+        public static float musicf;
         public static bool inSettings;
         public static int who;
         public void onClick()
         {
             soundf = sound.value;
             musicf = music.value;
+            ramka = ramk.isOn;
             switch (who)
             {
                 case 0 :
                     SceneManager.LoadScene("Menu");
+                    inSettings = false;
                     break;
                 case 1:
                     //SceneManager.LoadScene(Player.scene);
@@ -44,6 +48,7 @@ namespace onClick
                     break;
                 default:
                     SceneManager.LoadScene("Menu");
+                    inSettings = false;
                     break;
             }
         

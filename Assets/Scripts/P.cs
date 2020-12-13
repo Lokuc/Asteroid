@@ -5,7 +5,7 @@ public class P : MonoBehaviour
 
     private SpriteRenderer _spriteRenderer;
     private float alfa = 1f;
-    private bool toUp = false;
+    private bool toUp;
     private Color _color;
     public static MainUpdaiter updaiter;
     
@@ -47,15 +47,7 @@ public class P : MonoBehaviour
     {
         if (other.name == "plane")
         {
-            if (updaiter._minigun.active)
-            {
-                Asteroid.score += 50;
-            }
-            else
-            {
-                updaiter.activate(MainUpdaiter.Updates.MiniGun);
-            }
-
+            updaiter.activate(MainUpdaiter.Updates.MiniGun);
             Destroy(this.gameObject);
         }else if (other.CompareTag("Wall"))
         {

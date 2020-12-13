@@ -8,7 +8,16 @@ using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
-
+    
+    
+    public enum States
+    {
+        Live=0,
+        Pause=1,
+        Dead=2
+    }
+    public static States State;
+    
     private new Rigidbody2D rigidbody;
     private Vector2 vector;
     private Vector2 tmp;
@@ -39,10 +48,18 @@ public class Player : MonoBehaviour
     public GameObject eventSys;
     private AudioListener audioListener;
     public GameObject haveAL;
+    public GameObject[] guns;
 
 
 
     void Start()
+    {
+        State = States.Live;
+        init();
+
+    }
+
+    private void init()
     {
         audioListener = haveAL.GetComponent<AudioListener>();
         P.updaiter = updaiter;
@@ -59,7 +76,6 @@ public class Player : MonoBehaviour
         tmp = new Vector2();
         vector = new Vector2();
         Dj.getInstant().play(Dj.Sound.Game);
-
     }
 
     
@@ -137,8 +153,13 @@ public class Player : MonoBehaviour
                     //((CustomButton)(buttonSpace.GetComponent(typeof(CustomButton)))).setActive(false);
                 }
             }
-
             
+            foreach (var VARIABLE in guns)
+            {
+                VARIABLE.SetActive(updaiter.getActive(MainUpdaiter.Updates.MiniGun) && updaiter.getActive(MainUpdaiter.Updates.DoubleGun));
+            }
+
+
 
             tmp = rigidbody.velocity;
             if (tmp.x < 0.05 && tmp.x > -0.05)
@@ -359,7 +380,6 @@ public class Player : MonoBehaviour
                 vector.y += rigidbody.transform.up.y / 3;
 
             }
-
             bull.transform.position = vector;
             bull.GetComponent<Rigidbody2D>().AddForce(rigidbody.transform.up * 500, ForceMode2D.Force);
 
@@ -400,7 +420,7 @@ public class Player : MonoBehaviour
                 vector.y += rigidbody.transform.up.y / 3;
 
             }
-
+            bull.GetComponent<Rigidbody2D>().rotation=rotate;
             bull.transform.position = vector;
             bull.GetComponent<Rigidbody2D>().AddForce(rigidbody.transform.up * 800, ForceMode2D.Force);
         }
@@ -413,6 +433,7 @@ public class Player : MonoBehaviour
                 vector.x -= rigidbody.transform.right.x / 10f;
                 vector.y -= rigidbody.transform.right.y / 10f;
                 bull.transform.position = vector;
+                bull.GetComponent<Rigidbody2D>().rotation=rotate;
                 bull.GetComponent<Rigidbody2D>().AddForce(rigidbody.transform.up * 800, ForceMode2D.Force);
                 updateMiniGun = false;
             }

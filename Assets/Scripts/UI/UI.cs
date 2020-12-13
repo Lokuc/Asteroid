@@ -13,7 +13,7 @@ namespace UI
         private static UI ui;
         private float time;
         private int animStatus;
-        private bool forAnim;
+        //private bool forAnim;
         private Color color;
 
         public static UI getUI()
@@ -30,7 +30,6 @@ namespace UI
             anim = false;
             animStatus = 0;
             time = 0f;
-            forAnim = false;
         }
 
         public void setScore(int scr)
@@ -41,16 +40,16 @@ namespace UI
         }
 
 
-        private void addScoreAnim(int scor)
-        {
-            anim = true;
-            addNumForAnim = scor;
-        }
+        // private void addScoreAnim(int scor)
+        // {
+        //     anim = true;
+        //     addNumForAnim = scor;
+        // }
     
 
     
         void Update()
-        {
+        { 
             if (anim)
             {
                 time += Time.deltaTime;
@@ -60,7 +59,7 @@ namespace UI
                         addScoText.text = "+"+addNumForAnim;
                         color.a = 0;
                         addScoText.color = color;
-                        forAnim = true;
+                        //forAnim = true;
                         animStatus = 1;
                         time = 0f;
                         break;

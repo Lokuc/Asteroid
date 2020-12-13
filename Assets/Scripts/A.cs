@@ -1,12 +1,11 @@
-﻿
-using UnityEngine;
+﻿using UnityEngine;
 
 public class A : MonoBehaviour
 {
     
     private SpriteRenderer _spriteRenderer;
     private float alfa = 1f;
-    private bool toUp = false;
+    private bool toUp;
     private Color _color;
     public static MainUpdaiter MainUpdaiter;
     
@@ -48,12 +47,9 @@ public class A : MonoBehaviour
     {
         if (other.name == "plane")
         {
-            
             MainUpdaiter.activate(MainUpdaiter.Updates.DoubleGun);
-            
-
             Destroy(this.gameObject);
-        }else if (other.tag == "Wall")
+        }else if (other.CompareTag("Wall"))
         {
             Destroy(gameObject);
         }

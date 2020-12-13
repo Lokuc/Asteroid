@@ -1,11 +1,9 @@
-﻿
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Asteroids : MonoBehaviour
 {
 
-    private float time = 0f;
+    private float time;
     public GameObject [] aste;
     public static GameObject[] ast;
     private System.Random random;
@@ -19,11 +17,7 @@ public class Asteroids : MonoBehaviour
         ast = aste;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
 
     private void FixedUpdate()
     {

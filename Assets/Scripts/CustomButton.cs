@@ -24,17 +24,9 @@ public class CustomButton : MonoBehaviour
             return;
         }
         isActive = Active;
-        if (isActive)
-        {
-            on.SetActive(true);
-            off.SetActive(false);
-        }
-        else
-        {
-            on.SetActive(false);
-            off.SetActive(true);
-        }
-        
+        on.SetActive(Active);
+        off.SetActive(!Active);
+
     }
 
     // Update is called once per frame

@@ -9,20 +9,19 @@ public class Ulta : MonoBehaviour
         _vector2=new Vector2(0.06f,0.06f);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
 
     private void FixedUpdate()
     {
-        _vector2.x += 0.05f;
-        _vector2.y += 0.05f;
-        gameObject.transform.localScale = _vector2;
-        if (_vector2.x > 4)
+        if (Player.State == Player.States.Live)
         {
-            Destroy(gameObject);
+            _vector2.x += 2*Time.deltaTime;
+            _vector2.y += 2*Time.deltaTime;
+            gameObject.transform.localScale = _vector2;
+            if (_vector2.x > 4)
+            {
+                Destroy(gameObject);
+            }
         }
     }
 }

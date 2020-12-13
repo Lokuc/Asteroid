@@ -209,11 +209,11 @@ public class Asteroid : MonoBehaviour
 
     void Update()
     {
-        dist = (plane.Distance(gameObject.GetComponent<BoxCollider2D>())).distance;
-        if (dist < 1f)
-        {
-            Dj.getInstant().warning(dist);
-        }
+        // dist = (plane.Distance(gameObject.GetComponent<BoxCollider2D>())).distance; WARNING
+        // if (dist < 1f)
+        // {
+        //     Dj.getInstant().warning(dist);
+        // }
         
         degree += 3;
         rigidbody.rotation =degree;

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Updates;
 
 public class MainUpdaiter : MonoBehaviour
@@ -9,7 +10,7 @@ public class MainUpdaiter : MonoBehaviour
 
     public Minigun _minigun;
 
-    public DounleGun _dounleGun;
+    [FormerlySerializedAs("_dounleGun")] public DoubleGun doubleGun;
     void Start()
     {
         
@@ -26,7 +27,7 @@ public class MainUpdaiter : MonoBehaviour
         switch (updates)
         {
             case Updates.DoubleGun:
-                return _dounleGun.active;
+                return doubleGun.active;
             case Updates.MiniGun:
                 return _minigun.active;
         }
@@ -39,7 +40,7 @@ public class MainUpdaiter : MonoBehaviour
         switch (updates)
         {
             case Updates.DoubleGun:
-                _dounleGun.activate();
+                doubleGun.activate();
                 break;
             case Updates.MiniGun:
                 _minigun.activate();
@@ -56,7 +57,7 @@ public class MainUpdaiter : MonoBehaviour
     private void LateUpdate()
     {
         _minigun.Updates();
-        _dounleGun.Updates();
+        doubleGun.Updates();
     }
 
     public void deActivate(Updates updates)
@@ -64,7 +65,7 @@ public class MainUpdaiter : MonoBehaviour
         switch (updates)
         {
             case Updates.DoubleGun:
-                _dounleGun.deActivate();
+                doubleGun.deActivate();
                 break;
         }
     }

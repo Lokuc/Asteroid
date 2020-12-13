@@ -15,13 +15,13 @@ namespace UI
         private Color _color;
         private GameObject ult;
         private Vector2 vector;
-        private SpriteRenderer spriteRenderer;
+        private Image spriteRenderer;
     
     
         // Start is called before the first frame update
         void Start()
         {
-            spriteRenderer= hide.GetComponent<SpriteRenderer>();
+            spriteRenderer= hide.GetComponent<Image>();
             _color = spriteRenderer.color;
             spriteRenderer.color = _color;
             toUp = true;
@@ -78,8 +78,8 @@ namespace UI
                 if (progresBar.value >= 1f)
                 {
                     ulraReady = true;
-                    _color.a = 0;
-                    toUp = true;
+                    _color.a = 1f;
+                    toUp = false;
                     num = 0f;
                 }
             }
@@ -98,7 +98,7 @@ namespace UI
                 vector.y = 0.06f;
                 ult.transform.localScale = vector;
                 ult.transform.position = position;
-                _color.a = 0;
+                _color.a = 1f;
                 spriteRenderer.color = _color;
             }
         }
