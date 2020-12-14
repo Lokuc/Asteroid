@@ -22,7 +22,7 @@ namespace Updates
         {
             get
             {
-                return 3f;
+                return 5f;
             }
          
         }

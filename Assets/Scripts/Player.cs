@@ -1,5 +1,4 @@
 ﻿
-using System;
 using onClick;
 using UI;
 using UnityEngine;
@@ -37,13 +36,10 @@ public class Player : MonoBehaviour
     private bool toUp;
     private float alfa;
     private SpriteRenderer _spriteRenderer;
-    public static bool pause;
+    //public static bool pause;
     public GameObject deadScreen;
-    private bool dead;
-    public GameObject buttonSpace;
-    public GameObject joystick;
+    //private bool dead;
     public MainUpdaiter updaiter;
-    public static Scene scene;
     public GameObject dark;
     public GameObject eventSys;
     private AudioListener audioListener;
@@ -64,9 +60,8 @@ public class Player : MonoBehaviour
         audioListener = haveAL.GetComponent<AudioListener>();
         P.updaiter = updaiter;
         A.MainUpdaiter = updaiter;
-        Asteroid.plane = gameObject.GetComponent<PolygonCollider2D>();
+        //Asteroid.plane = gameObject.GetComponent<PolygonCollider2D>();
         setPause(false);
-        dead = false;
         _spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         toUp = false;
         color=new Color(1f,1f,1f,1f);
@@ -82,32 +77,23 @@ public class Player : MonoBehaviour
 
     private void setPause()
     {
-        if (pause)
-        {
-            pause = false;
-            Time.timeScale = 1f;
-        }
-        else
-        {
-            pause = true;
-            Time.timeScale = 0f;
-        }
+        State = State == States.Pause ? States.Live : States.Pause;
+        Time.timeScale = State == States.Pause ? 1f : 0f;
     }
 
     
     
     private void setPause(bool paus)
     {
-        
-        Player.pause = paus;
-        Time.timeScale = paus?0f:1f;
+        State = !paus ? States.Live : States.Pause;
+        Time.timeScale = !paus ? 1f : 0f;
     }
     
     
     void Update()
     {
         
-        if (dead)
+        if (State==States.Dead)
         {
             if (Input.GetKeyDown(KeyCode.R))
             {
@@ -126,41 +112,27 @@ public class Player : MonoBehaviour
                 setPause();
             }
         }
-        if (!pause)
+        if (State!=States.Pause)
         {
             if (updaiter.getActive(MainUpdaiter.Updates.MiniGun))
             {
-                if (Input.GetKey(KeyCode.Space))
-                {
-                    //((CustomButton)(buttonSpace.GetComponent(typeof(CustomButton)))).setActive(true);
-                    pressShotMini = true;
-                }
-                else
-                {
-                    //((CustomButton)(buttonSpace.GetComponent(typeof(CustomButton)))).setActive(false);
-                    pressShotMini = false;
-                }
+                pressShotMini = Input.GetKey(KeyCode.Space);
+                
             }else {
                 pressShotMini = false;
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
-                    //((CustomButton)(buttonSpace.GetComponent(typeof(CustomButton)))).setActive(true);
                     Dj.getInstant().play(Dj.Sound.Shot);
                     Shot();
                 }
-                else
-                {
-                    //((CustomButton)(buttonSpace.GetComponent(typeof(CustomButton)))).setActive(false);
-                }
             }
             
-            foreach (var VARIABLE in guns)
+            foreach (GameObject var in guns)
             {
-                VARIABLE.SetActive(updaiter.getActive(MainUpdaiter.Updates.MiniGun) && updaiter.getActive(MainUpdaiter.Updates.DoubleGun));
+                var.SetActive(updaiter.getActive(MainUpdaiter.Updates.MiniGun) && updaiter.getActive(MainUpdaiter.Updates.DoubleGun));
             }
 
-
-
+            
             tmp = rigidbody.velocity;
             if (tmp.x < 0.05 && tmp.x > -0.05)
             {
@@ -225,7 +197,6 @@ public class Player : MonoBehaviour
             {
                 updaiter.activate(MainUpdaiter.Updates.DoubleGun);
             }
-            joystickset();
         }
 
         
@@ -245,7 +216,6 @@ public class Player : MonoBehaviour
     {
         dark.SetActive(true);
         eventSys.SetActive(false);
-        scene = SceneManager.GetActiveScene();
         Settings.who = 1;
         SceneManager.LoadScene("Settings",LoadSceneMode.Additive);
     }
@@ -254,35 +224,11 @@ public class Player : MonoBehaviour
     {
         SceneManager.LoadScene("Menu");
     }
-
-    private void joystickset()
-    {
-        if (Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.D))
-        {
-            ((Joystick)(joystick.GetComponent(typeof(Joystick)))).setType(5);
-        }
-        else if (Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.A))
-        {
-            ((Joystick)(joystick.GetComponent(typeof(Joystick)))).setType(4);
-        }else if (Input.GetKey(KeyCode.W))
-        {
-            ((Joystick)(joystick.GetComponent(typeof(Joystick)))).setType(1);
-        }else if (Input.GetKey(KeyCode.D))
-        {
-            ((Joystick)(joystick.GetComponent(typeof(Joystick)))).setType(2);
-        }else if (Input.GetKey(KeyCode.A))
-        {
-            ((Joystick)(joystick.GetComponent(typeof(Joystick)))).setType(3);
-        }else 
-        {
-            ((Joystick)(joystick.GetComponent(typeof(Joystick)))).setType(0);
-        }
-        
-    }
+    
 
     private void FixedUpdate()
     {
-        if (!pause)
+        if (State!=States.Pause)
         {
             if (noDead)
             {
@@ -351,7 +297,7 @@ public class Player : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (pause)
+        if (State==States.Pause)
         {
             audioListener.enabled = !Settings.inSettings;
             eventSys.SetActive(!Settings.inSettings);
@@ -499,7 +445,7 @@ public class Player : MonoBehaviour
                 if (life <= 0)
                 {
                     setPause(true);
-                    dead = true;
+                    State = States.Dead;
                     Dj.getInstant().stop(Dj.Sound.Game);
                     Dj.getInstant().play(Dj.Sound.Dead);
                     deadScreen.SetActive(true);

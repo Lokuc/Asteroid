@@ -2,7 +2,7 @@
 
 namespace Updates
 {
-    public class DounleGun : MonoBehaviour, Updaiter
+    public class DoubleGun : MonoBehaviour, Updaiter
     {
         public float timer
         {

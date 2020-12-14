@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+
 
 public class PauseComponent : MonoBehaviour
 {
@@ -9,18 +7,14 @@ public class PauseComponent : MonoBehaviour
     public GameObject[] gameObjects;
 
     private bool p = false;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (p != Player.pause)
+        if (p != (Player.State==Player.States.Pause))
         {
-            p = Player.pause;
+            p = Player.State == Player.States.Pause;
             foreach (GameObject go in gameObjects)
             {
                 go.SetActive(p);
